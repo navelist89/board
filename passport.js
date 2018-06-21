@@ -26,7 +26,11 @@ module.exports = function(passport){ // index.js에서 넘겨준 passport입니�
         newUser.email = email; // 넘겨받은 정보들을 세팅합니다.
         newUser.password = newUser.generateHash(password); // generateHash을 통해 비밀번호를 hash화 합니다.
         newUser.name = req.body.name;
-  
+        newUser.isActive = false;
+        newUser.isSuper = false;
+        newUser.activationHash = newUser.generateActivationHash();
+        console.log('Hash');
+        console.log(newUser.activationHash);
         newUser.save(function (err) { // 저장합니다.
           if (err) throw err;
           return done(null, newUser); // serializeUser에 값을 넘겨줍니다.
@@ -39,7 +43,6 @@ module.exports = function(passport){ // index.js에서 넘겨준 passport입니�
     passwordField: 'password',
     passReqToCallback: true // 인증을 수행하는 인증 함수로 HTTP request를 그대로  전달할지 여부를 결정한다
   }, function(req, email, password, done){
-    console.log(email);
     User.findOne({'email': email}, function(err, user){
       
       if (err) return done(err);

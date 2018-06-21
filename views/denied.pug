@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h1 You are not logged in!
+
+
+  if user
+    p If you are seeing it, something's terribly wrong.
+    p You are #{user.name}

@@ -44,6 +44,11 @@ app.use(session({
   resave: true, 
   saveUninitialized: true 
 })); // 세션 활성화
+
+app.use(function(req,res,next){
+    res.locals.user = req.user;
+    next();
+});
     
 // flash는 세션을 필요로합니다. session 아래에 선언해주셔야합니다.
 app.use(flash());   
@@ -68,8 +73,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-//app.use('/', indexRouter);
-app.use('/', usersRouter);
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

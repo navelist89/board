@@ -1,6 +1,18 @@
-h1 Passport Test
-if user
-  #{user.name} Welcome!
+extends layout
 
-a(href='/signin') Login 
-a(href='/signup') Signup 
+block content
+
+  h1 Passport Test
+  if user
+
+    div
+      h2 #{user.name} Welcome!
+
+    div
+      a(href='/users/logout') Logout
+
+  else
+    a(href='/users/signin') Login 
+    a(href='/users/signup') Signup
+
+
