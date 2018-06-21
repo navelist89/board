@@ -1,0 +1,12 @@
+div.form-box
+  form(action="/" + link, method="post")
+    input#email(name='email', type='email', placeholder='input email')
+    input#password(name='password', type='password', placeholder='input pw')
+
+    if link=='users/signup'
+      input#name(name='name', type='name', placeholder='input name')
+
+    button(type='submit') #{title}
+  
+  div.alert.alert-warning(role='alert')
+    strong #{message}
