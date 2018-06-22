@@ -27,7 +27,7 @@ router.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-router.get('/info', isAuth, function(req, res){
+router.get('/info', function(req, res){
   res.render('userinfo', {user:req.user});
 });
 

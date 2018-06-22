@@ -80,9 +80,11 @@ router.post('/signup', passport.authenticate('local-signup', {
 function auth(req, res, next){
   if(!req.user){
     res.redirect('/signin');
+    return;
   }
   if(!req.user.isActive){
     res.redirect('/activate');      
+    return;
   }
   return next();
 }
