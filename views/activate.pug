@@ -1,0 +1,6 @@
+extends anon_layout
+
+block content
+  p You need to verify
+  if user
+    p verification mail was sent to #{user.email}

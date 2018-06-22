@@ -1,4 +1,5 @@
 var LocalStrategy = require('passport-local').Strategy; 
+var RememberMeStrategy = require('passport-remember-me').Strategy;
 var User = require('./models/User'); // 아직 안만들었습니다.
    
 module.exports = function(passport){ // index.js에서 넘겨준 passport입니다.
@@ -21,6 +22,7 @@ module.exports = function(passport){ // index.js에서 넘겨준 passport입니�
         if (err) return done(null);
         // flash를 통해서 메세지를 넘겨줍니다.   
         if (user) return done(null, false, req.flash('signupMessage', '중복된 아이디입니다.'));
+
              
         const newUser = new User();
         newUser.email = email; // 넘겨받은 정보들을 세팅합니다.
@@ -53,4 +55,21 @@ module.exports = function(passport){ // index.js에서 넘겨준 passport입니�
     });
   }));     
 
+
+  passport.use(new RememberMeStrategy(
+    function(token, done) {
+      Token.consume(token, function (err, user) {
+        if (err) { return done(err); }
+        if (!user) { return done(null, false); }
+        return done(null, user);
+      });
+    },
+    function(user, done) {
+      var token = utils.generateToken(64);
+      Token.save(token, { userId: user.id }, function(err) {
+        if (err) { return done(err); }
+        return done(null, token);
+      });
+    }
+  ));
 }

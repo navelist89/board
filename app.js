@@ -26,6 +26,7 @@ db.once('open', function() {
   console.log('Conneted mongoDB');
 });
 
+app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
@@ -57,6 +58,7 @@ app.use(flash());
 // passport 초기화 =
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(passport.authenticate('remember-me'));
 
 
 /*
@@ -70,10 +72,10 @@ User.findOne({'email':'navelist89@gmail.com'}, function(err,user){
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use(indexRouter.auth);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
