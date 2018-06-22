@@ -41,11 +41,12 @@ router.get('/info', isAuth, function(req, res){
 
 router.get('/activate/:hash' ,(req,res,next)=>{
   User.findOne({'activationHash':req.params.hash}, function(err,user){
-    if (err) return;
-    if (!user) return res.render('inactive', {message:req.flash('Nonexisting Hash')});
+    if (err) return res.redirect('/');
+    if (!user) return res.render('inactive', {message:'Nonexisting Hash'});
     user.activationHash = "";
     user.isActive = true;
     user.save();
+    res.redirect('/');
   });
 });
 
