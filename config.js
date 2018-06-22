@@ -1,6 +1,7 @@
-
-config.gmail_id = "<yourid>";
-config.gmail_pw = "<yourpw>;
+var config ={
+  gmail_id : "<your gmail id>",
+  gmail_pw : "<your gmail pw>"
+}
 
 
 module.exports = config;
