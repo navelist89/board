@@ -4,6 +4,16 @@ var router = express.Router();
 var User = require('../models/User');
 
 
+function stopAuth(req, res, next){
+  if(!req.user)
+    return next();
+
+  if(!req.user.isActive)
+    return res.redirect('/activate');
+
+  res.redirect('/');
+}
+
 /* GET home page. */
 router.get('/',
     auth,
@@ -12,12 +22,12 @@ router.get('/',
     }
 );
 
-router.get('/signup', function(req, res){
+router.get('/signup',stopAuth,  function(req, res){
   res.render('users_signup', { title: '회원가입', message : req.flash('signupMessage')});
 });
 
 
-router.get('/signin', function(req, res){ 
+router.get('/signin', stopAuth, function(req, res){ 
   res.render('users_signin', { title: '로그인',message : req.flash('signinMessage')});
 });
 
@@ -32,10 +42,13 @@ router.get('/activate/:hash*?' ,(req,res,next)=>{
       user.save();
       res.redirect('/');
     });
+    return;
     }
 
-  if(req.user && req.user.isActive)
+  if(req.user && req.user.isActive){
     res.redirect('/');
+    return;
+  }
   res.render('activate', {user:req.user});
   }
 

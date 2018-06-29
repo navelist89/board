@@ -1,6 +1,6 @@
 var config ={
-  gmail_id : "<your gmail id>",
-  gmail_pw : "<your gmail pw>"
+  gmail_id : "navelist89@gmail.com",
+  gmail_pw : "SSth51245_"
 }
 
 

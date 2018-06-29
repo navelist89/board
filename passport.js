@@ -1,6 +1,7 @@
 var LocalStrategy = require('passport-local').Strategy; 
 var RememberMeStrategy = require('passport-remember-me').Strategy;
 var User = require('./models/User'); // 아직 안만들었습니다.
+var mail = require('./mail');
    
 module.exports = function(passport){ // index.js에서 넘겨준 passport입니다.
    passport.serializeUser(function(user, done){ // req.session.passport.user에 세션에 저장하는 과정입니다.
@@ -31,8 +32,7 @@ module.exports = function(passport){ // index.js에서 넘겨준 passport입니�
         newUser.isActive = false;
         newUser.isSuper = false;
         newUser.activationHash = newUser.generateActivationHash();
-        console.log('Hash');
-        console.log(newUser.activationHash);
+        mail(newUser.email, newUser.activationHash);
         newUser.save(function (err) { // 저장합니다.
           if (err) throw err;
           return done(null, newUser); // serializeUser에 값을 넘겨줍니다.
@@ -51,6 +51,8 @@ module.exports = function(passport){ // index.js에서 넘겨준 passport입니�
       if (!user) return done(null, false, req.flash('signinMessage', '아이디가 존재하지 않습니다.'));
       // validPassword을 통해 비교를 해줍니다.    
       if (!user.validPassword(password)) return done(null, false, req.flash('signinMessage', '비밀번호가 틀렸어요'));
+      if (!user.isActive)
+        done(null, false, req.flash('signinMessage', "You are not activated"));
       return done(null, user); // 성공시 데이터를 넘겨줍니다.
     });
   }));     
